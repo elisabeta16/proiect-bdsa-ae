@@ -21,6 +21,7 @@ function displayColumns(value) {
     return 	'<td>'+value.id+'</td>'
             + '<td class="name">'+value.name+'</td>'
 			+ '<td class="description">'+value.description+'</td>'
+			+ '<td class="pret">'+value.pret+'</td>'
 			+ '<td align="center">'
 			+	'<button onclick="viewRecord('+ value.id +')" class="btn btn-edit">Update</button>'
 			+ '</td>'
@@ -33,8 +34,9 @@ function addRecord() {
     $('#id').val('');
     $('#name').val('');
     $('#description').val('');
+    $('#pret').val('');
     
-    $('#myModalLabel').html('Add New Category');
+    $('#myModalLabel').html('Incaltaminte Noua');
   //  $('#add_new_record_modal').modal('show');
 }
 
@@ -45,6 +47,7 @@ function viewRecord(id) {
         //bind the values to the form fields
         $('#name').val(data.name);
         $('#description').val(data.description);
+        $('#pret').val(data.pret);
 
         $('#id').val(id);
         $('#myModalLabel').html('Edit Category');
@@ -54,14 +57,16 @@ function viewRecord(id) {
 }
 
 function saveRecord() {
+    //get data from the html form
     var formData = $('#record_form').serializeObject();
+    
+    //decide if it's an edit or create
     if(formData.id) {
         updateRecord(formData);
     } else {
         createRecord(formData);
     }
 }
-
 function createRecord(formData) {
     $.ajax({
         url: '/categories/',
@@ -92,6 +97,7 @@ function updateRecord(formData) {
         success: function(data) {
             $('#row_id_'+formData.id+'>td.name').html(formData.name);
             $('#row_id_'+formData.id+'>td.description').html(formData.description);
+            $('#row_id_'+formData.id+'>td.pret').html(formData.pret);
             $('#add_new_record_modal').modal('hide');
         } 
     });

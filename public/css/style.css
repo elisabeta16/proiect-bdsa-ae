@@ -1,10 +1,49 @@
-*:not(input):not(textarea) {
+:not(input):not(textarea) {
     margin: 0;
     padding: 0;
     border: none;
 }
+
+.callout {
+  position: fixed;
+  bottom: 35px;
+  right: 20px;
+  margin-left: 20px;
+  max-width: 300px;
+}
+
+/* Callout header */
+.callout-header {
+  padding: 25px 15px;
+  background: #DDA0DD;
+  font-size: 30px;
+  color: white;
+}
+
+/* Callout container/body */
+.callout-container {
+  padding: 15px;
+  background-color: #FFC0CB;
+  color: black
+}
+
+/* Close button */
+.closebtn {
+  position: absolute;
+  top: 5px;
+  right: 15px;
+  color: white;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+/* Change color on mouse-over */
+.closebtn:hover {
+  color: lightgrey;
+}
 body {
-    font-family: 'robotoregular', Arial, Verdana, sans-serif;
+    font-family: 'Times New Roman', Times, serif;
+    
 }
 h1,h2,h3,h4,h5,h6,strong,b {
     font-family: 'robotobold';
@@ -17,10 +56,11 @@ em,i {
 #container {
     margin: 0 auto;
     width: 100%;
-    background: #fff;
+    background: #ccc;
 }
 header {
-    background: #ccc;
+    
+       background-color: #FFFFE0;
 }
 header h1 {
     margin: 0;
@@ -31,7 +71,7 @@ header h1 {
 #navigation {
     float: left;
     width: 100%;
-    background: #333;
+    background: #BDB76B;
 }
 #navigation ul {
     margin: 0;
@@ -45,12 +85,12 @@ header h1 {
     display: block;
     float: left;
     padding: 5px 10px;
-    color: #fff;
+    color: #FFFFE0;
     text-decoration: none;
-    border-right: 1px solid #fff;
+    border-right: 1px solid #ccc;
 }
 #navigation li a:hover {
-    background: #c00;
+ background: #000000;
 }
 main {
     float: left;
@@ -59,7 +99,7 @@ main {
 main > section {
     float: left;
     width: 100%;
-    background: #f2f2f2;
+    background: #FFFFE0;
 }
 main > section > .sidebar {
     display: inline;
@@ -86,9 +126,9 @@ main > section > .sidebar.left ul li {
     padding: 20px 10px;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
-    background: #fff;
+    background: #FFFFE0;
     border-width: 0 1px 0 1px;
-    border-color: #ccc;
+    border-color: #FFFFE0;
     border-style: solid;
 }
 #content h2 {
@@ -102,7 +142,7 @@ main > section > .sidebar.right h3 {
 }
 footer {
     clear: both;
-    background: #ccc;
+    background: #BDB76B;
     text-align: left;
     padding: 20px;
     height: 1%;

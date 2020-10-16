@@ -3,9 +3,9 @@ var Sequelize = require("sequelize")
 
 //connect to mysql database
 //baza de date, username, password
-var sequelize = new Sequelize('catalog', 'root', 'pass', {
+var sequelize = new Sequelize('catalog','edragnea', 'stud1234', {
     dialect:'mysql',
-    host:'db'
+    host:'127.0.0.1'
 })
 
 sequelize.authenticate().then(function(){
@@ -17,7 +17,8 @@ sequelize.authenticate().then(function(){
 //define a new Model
 var Categories = sequelize.define('categories', {
     name: Sequelize.STRING,
-    description: Sequelize.STRING
+    description: Sequelize.STRING,
+    pret: Sequelize.INTEGER
 })
 
 var Products = sequelize.define('products', {
@@ -29,14 +30,13 @@ var Products = sequelize.define('products', {
 })
 
 var Reviews = sequelize.define('reviews', {
-    product_id: Sequelize.INTEGER,
     name: Sequelize.STRING,
     content: Sequelize.STRING,
     score: Sequelize.INTEGER
 })
 
 Products.belongsTo(Categories, {foreignKey: 'category_id', targetKey: 'id'})
-Products.hasMany(Reviews, {foreignKey: 'product_id'});
+//Products.hasMany(Reviews, {foreignKey: 'product_id'});
 
 var app = express()
 
@@ -121,11 +121,8 @@ app.get('/products', function(request, response) {
             include: [{
                 model: Categories,
                 where: { id: Sequelize.col('products.category_id') }
-            }, {
-                model: Reviews,
-                where: { id: Sequelize.col('products.id')},
-                required: false
-            }]
+            }
+            ]
         }
         
         ).then(
@@ -140,11 +137,8 @@ app.get('/products/:id', function(request, response) {
             include: [{
                 model: Categories,
                 where: { id: Sequelize.col('products.category_id') }
-            }, {
-                model: Reviews,
-                where: { id: Sequelize.col('products.id')},
-                required: false
-            }]
+            }
+            ]
         }).then(
             function(product) {
                 response.status(200).send(product)
@@ -191,11 +185,8 @@ app.get('/categories/:id/products', function(request, response) {
             include: [{
                 model: Categories,
                 where: { id: Sequelize.col('products.category_id') }
-            }, {
-                model: Reviews,
-                where: { id: Sequelize.col('products.id')},
-                required: false
-            }]
+            }
+            ]
         }
             ).then(
             function(products) {
@@ -204,24 +195,58 @@ app.get('/categories/:id/products', function(request, response) {
         )
 })
 
-app.get('/reviews', function(request, response) {
 
+ async function getReviews(request, response) {
+    try {
+        let reviews = await Reviews.findAll();
+        response.status(200).json(reviews)
+    } catch(err) {
+        response.status(500).send('something bad happened')
+    }
+}
+
+app.get('/reviews', getReviews);
+
+app.get('/reviews/:id', function(request, response)  {
+    Reviews.findOne({where: {id:request.params.id}}).then(function(review) {
+        if(review) {
+            response.status(200).send(review)
+        } else {
+            response.status(404).send()
+        }
+    })
 })
 
-app.get('/reviews/:id', function(request, response) {
-    
-})
-
-app.post('/reviews', function(request, response) {
-
+app.post('/reviews', function(request, response)  {
+    Reviews.create(request.body).then(function(review) {
+        response.status(201).send(review)
+    })
 })
 
 app.put('/reviews/:id', function(request, response) {
-    
+    Reviews.findByPk(request.params.id).then(function(review) {
+        if(review) {
+            review.update(request.body).then(function(review){
+                response.status(201).send(review)
+            }).catch(function(error) {
+                response.status(200).send(error)
+            })
+        } else {
+            response.status(404).send('Not found')
+        }
+    })
 })
 
 app.delete('/reviews/:id', function(request, response) {
-    
+    Reviews.findByPk(request.params.id).then(function(review) {
+        if(review) {
+            review.destroy().then(function(){
+                response.status(204).send()
+            })
+        } else {
+            response.status(404).send('Not found')
+        }
+    })
 })
 
 app.listen(8080)

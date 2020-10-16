@@ -22,6 +22,7 @@ CREATE TABLE IF NOT EXISTS `categories` (
   `id` smallint(5) NOT NULL AUTO_INCREMENT,
   `name` varchar(30) DEFAULT NULL,
   `description` varchar(100) DEFAULT NULL,
+  `pret` INT(11),
   `createdAt` timestamp,
   `updatedAt` timestamp,
   PRIMARY KEY (`id`),
